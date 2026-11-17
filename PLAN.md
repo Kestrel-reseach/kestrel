@@ -155,13 +155,17 @@ Times are rough estimates for one person part time. Steps 0–7 and 10 are the p
 | Poisoned or stale memory | Step 6 provenance, decay, stale-fact probe; immutable log in Step 9 |
 | Overclaiming against a frontier model | Gates measured on the slice; the report states the slice |
 
-## Open decisions (owner only — do not guess)
+## Owner decisions — resolved 2026-11-17
 
-1. Which frontier model is **F**, and the cost cap for the one run.
-2. Buy a plug-in wall power meter for calibration, or accept relative-only energy numbers.
-3. Accept or change the proposed gates (they must be frozen before Step 0 completes).
-4. Whether cloud escalation is ever allowed (default: off).
-5. Whether any real personal data may be used in the memory probe (default: synthetic only).
+Do not reopen these without a new, explicit owner decision.
+
+1. **F and cost cap** — deferred to Step 2. `F.model` and `F.cost_cap_usd` stay `UNDEFINED` until then.
+2. **Wall power meter** — no meter. Energy is **relative only**; every result must say so.
+3. **Gates** — G-Q, G-F, G-M, G-R and no-regression **accepted as written** and frozen in `kestrel-eval/evaluation/manifest.yaml`. Never change a threshold after seeing results.
+4. **Cloud escalation** — off.
+5. **Real personal data** — synthetic only. Real items require item-by-item owner approval.
+6. **Suite sizes** — `sizes_are: per_partition` (1200 items per partition, 3600 total). This keeps locked-test groups at n=100–300 with ±5.7–9.8 pp CIs, so the 5 pp G-Q gate is testable. A `total` reading would give n=20–60 and ±12.7–21.9 pp CIs and was rejected.
+7. **Knowledge-QA corpus** — small fixed public Wikipedia snapshot; exact dump URL and SHA-256 to be pinned at Step 1.
 
 ## Status (update as you go)
 
@@ -178,3 +182,5 @@ Times are rough estimates for one person part time. Steps 0–7 and 10 are the p
 - [ ] Step 10 — final evaluation and report
 
 Log of results and decisions: add dated lines here, one per finished or killed step, with the numbers and the commit that produced them.
+
+- 2026-11-17 — Owner decisions resolved and recorded above; evaluation manifest frozen (kestrel-eval commit `52f4ed0`). Step 0 implementation merged in kestrel-eval PR #2 (117 tests passing, CI green); repo-local agent instruction files removed in PR #3. Step 0 is **not** marked passed yet: the energy harness still has to be run on the target Ryzen/RTX hardware, and energy will be relative-only by owner decision.
