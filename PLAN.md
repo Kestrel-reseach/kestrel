@@ -35,7 +35,7 @@ kestrel/                      (this folder, not a git repo)
     └── baselines/ reports/ tests/
 ```
 
-Both repos are private. The module files are empty placeholders.
+Both repos are public under the `Kestrel-reseach` org (`https://github.com/Kestrel-reseach/kestrel` and `https://github.com/Kestrel-reseach/kestrel-eval`). The module files are empty placeholders.
 
 ## Hardware
 
