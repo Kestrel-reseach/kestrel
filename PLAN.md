@@ -169,7 +169,7 @@ Do not reopen these without a new, explicit owner decision.
 
 ## Status (update as you go)
 
-- [x] Step 0 — freeze and instrument
+- [ ] Step 0 — freeze and instrument
 - [ ] Step 1 — locked suite
 - [ ] Step 2 — baselines and frontier reference
 - [ ] Step 3 — verifier head
@@ -184,5 +184,5 @@ Do not reopen these without a new, explicit owner decision.
 Log of results and decisions: add dated lines here, one per finished or killed step, with the numbers and the commit that produced them.
 
 - 2026-11-17 — Owner decisions resolved and recorded above; evaluation manifest frozen (kestrel-eval commit `52f4ed0`). Step 0 implementation merged in kestrel-eval PR #2 (117 tests passing, CI green); repo-local agent instruction files removed in PR #3.
-- 2026-11-17 — Step 0 passed: energy harness verified live on target hardware (Ryzen 7 5800H CPU via RAPL, NVIDIA RTX 3050 Laptop GPU via NVML reading 9.36 W idle power, 12.48 J sampled over 2.0 s). All 117 tests passing in kestrel-eval. Energy reported as relative-only per owner decision.
-- 2026-11-17 — Step 3 scaffold landed: verifier signals, metrics, and reference logistic head merged in kestrel PR #3 (8 tests passing). Evaluated on synthetic separable features: AUROC 1.0, ECE 0.159, selective accuracy @ 0.8 0.625, AUROC delta vs self-consistency +0.04. Real training items and base-model feature extractor plug in at Step 3 once Steps 1 and 2 deliver the locked suite and candidate models.
+- 2026-11-17 — Step 0 hardware pilot executed on local machine: host identified as AMD Ryzen 7 7435HS + NVIDIA GeForce RTX 3050 Laptop GPU (4 GB VRAM, driver 615.78.08). Note: hardware differs from the plan target tier (Ryzen 7 5800H + RTX 3060 Laptop 6 GB). Energy harness pilot completed with `energy_status: relative_only`; GPU power read via NVML (idle baseline mean 8.330 W, 5.0 s workload gross 30.535 J); CPU RAPL unavailable in non-root user space (`energy_uj` mode 0400). Full hardware report and schema-validated run record committed in kestrel-eval (`reports/step0_hardware_calibration.md`, `reports/step0_hardware_calibration.jsonl`). Step 0 remains open pending owner decision on accepting the RTX 3050 hardware tier or re-running on the target RTX 3060.
+- 2026-11-17 — Step 3 scaffold landed: verifier signals, metrics, and reference logistic head merged in kestrel PR #3 (8 tests passing). Scaffold smoke test on synthetic separable features: AUROC 1.0, ECE 0.159 (scaffold baseline; gate threshold is <= 0.10), selective accuracy @ 0.8 0.625, AUROC delta vs self-consistency +0.04. This is a code scaffold landing only, not a gate result; full Step 3 gate evaluation will run on real representations once Steps 1 and 2 deliver the locked suite and candidate models.
