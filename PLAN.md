@@ -167,6 +167,10 @@ Do not reopen these without a new, explicit owner decision.
 6. **Suite sizes** — `sizes_are: per_partition` (1200 items per partition, 3600 total). This keeps locked-test groups at n=100–300 with ±5.7–9.8 pp CIs, so the 5 pp G-Q gate is testable. A `total` reading would give n=20–60 and ±12.7–21.9 pp CIs and was rejected.
 7. **Knowledge-QA corpus** — small fixed public Wikipedia snapshot; exact dump URL and SHA-256 to be pinned at Step 1.
 8. **Test hardware (2026-11-18)** — owner accepts Ryzen 7 7435HS + RTX 3050 Laptop 4 GB as the available test tier because the RTX 3060 is currently unavailable. G-R thresholds are unchanged (1–1.5 GB assistant VRAM). Every result must name the tier used; a re-run on the RTX 3060 is deferred until it is available.
+9. **Context length (2026-11-18)** — 2048 tokens, fixed for all evaluations and VRAM checks.
+10. **Energy counters (2026-11-18)** — CPU energy `UNMEASURED`; GPU-only relative energy via NVML, labelled on every result.
+11. **Non-inferiority margin (2026-11-18)** — 3 pp, the same as no-regression. Proving equality within 3 pp on 300 items may be inconclusive; report the interval.
+12. **Step 10 F run on free tier (2026-11-18)** — owner accepts sending locked-test items to Gemini 2.5 Pro free tier, with safeguards: the locked partition is strictly one-time use and cannot be reused for new claims after exposure; send F only what is strictly needed to be scored; build a reserve test set after Step 10 that is never sent to any external API; keep exploring zero-cost / no-retention credits but do not block the run on it. Record the exposure decision in the report.
 
 ## Status (update as you go)
 
@@ -187,3 +191,4 @@ Log of results and decisions: add dated lines here, one per finished or killed s
 - 2026-11-17 — Owner decisions resolved and recorded above; evaluation manifest frozen (kestrel-eval commit `52f4ed0`). Step 0 implementation merged in kestrel-eval PR #2 (117 tests passing, CI green); repo-local agent instruction files removed in PR #3. Step 0 is **not** marked passed yet: the energy harness still has to be run on the target Ryzen/RTX hardware, and energy will be relative-only by owner decision.
 - 2026-11-18 — Owner accepted the alternate test tier (Ryzen 7 7435HS + RTX 3050 Laptop 4 GB) because the RTX 3060 target is unavailable. G-R thresholds unchanged; every result must name the tier used, and the 3060 re-run is deferred until that hardware is available.
 - 2026-11-18 — F chosen as Gemini 2.5 Pro on the Google AI Studio free tier with a $0 cost cap; context length fixed at 2048 tokens; CPU energy recorded as UNMEASURED with GPU-only relative energy. Manifest updated in kestrel-eval.
+- 2026-11-18 — D12 resolved: Step 10 locked-test F run proceeds on the free tier with one-time-use, minimal-send and reserve-test-set safeguards.
