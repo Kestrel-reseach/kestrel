@@ -39,8 +39,8 @@ Both repos are public under the `Kestrel-reseach` org (`https://github.com/Kestr
 
 ## Hardware
 
-- CPU tier: Ryzen 7 5800H, no NPU.
-- GPU tier: RTX 3060 Laptop 6 GB. The assistant gets **1–1.5 GB VRAM** (a 3B model at 4-bit does not fit; it is CPU-tier only).
+- CPU tier: Ryzen 7 5800H, no NPU. **Owner-accepted test tier (2026-11-18):** Ryzen 7 7435HS, because the 5800H machine is unavailable.
+- GPU tier: RTX 3060 Laptop 6 GB. The assistant gets **1–1.5 GB VRAM** (a 3B model at 4-bit does not fit; it is CPU-tier only). **Owner-accepted test tier (2026-11-18):** RTX 3050 Laptop 4 GB (driver 615.78.08). The 1–1.5 GB assistant budget and all frozen gates are unchanged; every result must state which tier produced it, and a re-run on the 3060 is deferred until that hardware is available.
 - Training: free Colab T4. Sessions are not guaranteed; checkpoint every 10–20 minutes and test resume.
 
 ## Goal as measured claims (not as promises)
@@ -166,6 +166,7 @@ Do not reopen these without a new, explicit owner decision.
 5. **Real personal data** — synthetic only. Real items require item-by-item owner approval.
 6. **Suite sizes** — `sizes_are: per_partition` (1200 items per partition, 3600 total). This keeps locked-test groups at n=100–300 with ±5.7–9.8 pp CIs, so the 5 pp G-Q gate is testable. A `total` reading would give n=20–60 and ±12.7–21.9 pp CIs and was rejected.
 7. **Knowledge-QA corpus** — small fixed public Wikipedia snapshot; exact dump URL and SHA-256 to be pinned at Step 1.
+8. **Test hardware (2026-11-18)** — owner accepts Ryzen 7 7435HS + RTX 3050 Laptop 4 GB as the available test tier because the RTX 3060 is currently unavailable. G-R thresholds are unchanged (1–1.5 GB assistant VRAM). Every result must name the tier used; a re-run on the RTX 3060 is deferred until it is available.
 
 ## Status (update as you go)
 
@@ -184,3 +185,4 @@ Do not reopen these without a new, explicit owner decision.
 Log of results and decisions: add dated lines here, one per finished or killed step, with the numbers and the commit that produced them.
 
 - 2026-11-17 — Owner decisions resolved and recorded above; evaluation manifest frozen (kestrel-eval commit `52f4ed0`). Step 0 implementation merged in kestrel-eval PR #2 (117 tests passing, CI green); repo-local agent instruction files removed in PR #3. Step 0 is **not** marked passed yet: the energy harness still has to be run on the target Ryzen/RTX hardware, and energy will be relative-only by owner decision.
+- 2026-11-18 — Owner accepted the alternate test tier (Ryzen 7 7435HS + RTX 3050 Laptop 4 GB) because the RTX 3060 target is unavailable. G-R thresholds unchanged; every result must name the tier used, and the 3060 re-run is deferred until that hardware is available.
