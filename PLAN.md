@@ -174,8 +174,8 @@ Do not reopen these without a new, explicit owner decision.
 
 ## Status (update as you go)
 
-- [ ] Step 0 — freeze and instrument
-- [ ] Step 1 — locked suite
+- [x] Step 0 — freeze and instrument
+- [x] Step 1 — locked suite
 - [ ] Step 2 — baselines and frontier reference
 - [ ] Step 3 — verifier head
 - [ ] Step 4 — verifier-gated halting
@@ -192,3 +192,5 @@ Log of results and decisions: add dated lines here, one per finished or killed s
 - 2026-11-18 — Owner accepted the alternate test tier (Ryzen 7 7435HS + RTX 3050 Laptop 4 GB) because the RTX 3060 target is unavailable. G-R thresholds unchanged; every result must name the tier used, and the 3060 re-run is deferred until that hardware is available.
 - 2026-11-18 — F chosen as Gemini 2.5 Pro on the Google AI Studio free tier with a $0 cost cap; context length fixed at 2048 tokens; CPU energy recorded as UNMEASURED with GPU-only relative energy. Manifest updated in kestrel-eval.
 - 2026-11-18 — D12 resolved: Step 10 locked-test F run proceeds on the free tier with one-time-use, minimal-send and reserve-test-set safeguards.
+- 2026-11-18 — **Step 0 passed** (owner sign-off). Manifest frozen at v1.1; energy relative-only with CPU UNMEASURED and GPU NVML. Hardware pilot on accepted RTX 3050 / Ryzen 7435HS tier: formal idle baseline 10 min × 3 (1,800 s, 17,943 samples, pooled mean 6.1444 W ± 0.9472 W; counter-derived 6.1686 W, 0.39% difference); CUDA GEMM pilot mean net 610.93 J over 11.362 s, passing the 3σ noise rule. Kill gate applied per owner decision: no wall meter. Steps 0 implementation and follow-ups in kestrel-eval PRs #2 and #10 (commit `4d0946e`); closure proposal `reports/step0/CLOSURE_PROPOSAL.md`.
+- 2026-11-18 — **Step 1 passed** (owner sign-off). Locked suite complete at 3,600 items (1,200 per partition: 200/200/300/100/300/100). Train and validation JSONL in repo; locked-test items held outside git with SHA-256 per group and root hash `22fff5e0…` recorded in the manifest. Leakage audit: zero item-ID overlaps and zero answer-in-prompt leaks across all 3,600 items; near-duplicate detector implemented. Kestrel-eval PR #11 (commit `01185df`), 177 tests passing, 3 skipped, CI green.
