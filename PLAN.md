@@ -159,7 +159,7 @@ Times are rough estimates for one person part time. Steps 0–7 and 10 are the p
 
 Do not reopen these without a new, explicit owner decision.
 
-1. **F and cost cap** — deferred to Step 2. `F.model` and `F.cost_cap_usd` stay `UNDEFINED` until then.
+1. **F and cost cap (2026-11-18)** — Gemini 2.5 Pro via the Google AI Studio free tier, cost cap **$0**. Run once on public + synthetic items only, paced across days because the free quota is unpublished; record the exact model version and date. Report G-F as the gap to a **free-tier reference**, not to the current frontier. Free-tier content may be used for training by the provider, so no real personal data is sent.
 2. **Wall power meter** — no meter. Energy is **relative only**; every result must say so.
 3. **Gates** — G-Q, G-F, G-M, G-R and no-regression **accepted as written** and frozen in `kestrel-eval/evaluation/manifest.yaml`. Never change a threshold after seeing results.
 4. **Cloud escalation** — off.
@@ -186,3 +186,4 @@ Log of results and decisions: add dated lines here, one per finished or killed s
 
 - 2026-11-17 — Owner decisions resolved and recorded above; evaluation manifest frozen (kestrel-eval commit `52f4ed0`). Step 0 implementation merged in kestrel-eval PR #2 (117 tests passing, CI green); repo-local agent instruction files removed in PR #3. Step 0 is **not** marked passed yet: the energy harness still has to be run on the target Ryzen/RTX hardware, and energy will be relative-only by owner decision.
 - 2026-11-18 — Owner accepted the alternate test tier (Ryzen 7 7435HS + RTX 3050 Laptop 4 GB) because the RTX 3060 target is unavailable. G-R thresholds unchanged; every result must name the tier used, and the 3060 re-run is deferred until that hardware is available.
+- 2026-11-18 — F chosen as Gemini 2.5 Pro on the Google AI Studio free tier with a $0 cost cap; context length fixed at 2048 tokens; CPU energy recorded as UNMEASURED with GPU-only relative energy. Manifest updated in kestrel-eval.
