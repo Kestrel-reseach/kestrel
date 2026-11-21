@@ -27,6 +27,7 @@ __all__ = [
     "auc_roc",
     "evaluate",
     "expected_calibration_error",
+    "fit_temperature",
     "selective_accuracy",
     "self_consistency_baseline",
     "sigmoid",
@@ -202,6 +203,28 @@ def temperature_scale(scores: Sequence[float], temperature: float) -> tuple[floa
         logit = math.log(probability / (1.0 - probability)) / temperature
         scaled.append(sigmoid(logit))
     return tuple(scaled)
+
+
+def fit_temperature(
+    scores: Sequence[float],
+    labels: Sequence[bool],
+    candidates: Sequence[float] = (0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0),
+) -> float:
+    """Pick the temperature with the lowest ECE on calibration data."""
+    if len(scores) != len(labels):
+        raise ValueError("scores and labels must have the same length")
+    if not scores or not candidates:
+        raise ValueError("scores and candidates must be non-empty")
+    best_temperature = 1.0
+    best_error = float("inf")
+    for temperature in candidates:
+        error = expected_calibration_error(
+            temperature_scale(scores, temperature), labels
+        )
+        if error < best_error:
+            best_temperature = float(temperature)
+            best_error = error
+    return best_temperature
 
 
 def evaluate(
