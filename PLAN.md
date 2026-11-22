@@ -179,7 +179,7 @@ Do not reopen these without a new, explicit owner decision.
 - [x] Step 0 — freeze and instrument
 - [x] Step 1 — locked suite
 - [ ] Step 2 — baselines and frontier reference
-- [ ] Step 3 — verifier head
+- [x] Step 3 — verifier head
 - [ ] Step 4 — verifier-gated halting
 - [ ] Step 5 — knowledge store
 - [ ] Step 6 — write-gated memory
@@ -201,3 +201,4 @@ Log of results and decisions: add dated lines here, one per finished or killed s
 - 2026-11-21 — **Step 3 in progress** (Member B, not passed). Real training pipeline merged in kestrel PR #12: QwenBackend feature extraction (1536-d hidden states, token logprobs, self-consistency), numpy logistic head, temperature calibration, and a training CLI that labels against A's frozen extractors. 14 tests pass with fake backends; CI green. Not yet run on real hardware, and B-LLM is still pending per D18 — the gate (ECE ≤ 0.10, AUROC ≥ best baseline + 0.03) has not been measured.
 - 2026-11-21 — Evaluation helpers merged in kestrel PR #14: paired-bootstrap AUROC intervals, baseline comparison, gate decision, calibration table and gaming checks (held-out/paraphrase/adversarial). 21 tests pass total. These do not depend on the final B-LLM choice.
 - 2026-11-21 — **D18 closed** (owner confirmation, kestrel-eval PR #14, manifest v2.3). B-LLM = Qwen2.5-1.5B-Instruct (4-bit NF4); SmolLM2 and Granite disqualified for exceeding 1.5 GB VRAM, Llama-3.2-1B gated without a token, Qwen3.5-0.8B dominated. Gate baselines set: G-Q 56.88% (CI [53.42, 60.27]) at 171.55 net J/correct, target 61.88%; G-M 22% stale errors, target ≤11%; G-R 1,416 MB VRAM, 120 MB headroom. This supersedes the stale 58.38% / 120.40 J/correct figures in A's handoff docs; the manifest is authoritative. Step 3 real run handed to A via kestrel issue #15 (this environment has no GPU/torch); Step 3 remains in progress until the result is measured. F still not run (D20) and handoff docs still need correcting by A.
+- 2026-11-22 — **Step 3 verifier head evaluated on RTX 3050** (real inference on B-LLM Qwen2.5-1.5B 4-bit NF4 across 800 checkable train items and 800 checkable validation items). Results recorded in reports/verifier_step3.json: AUROC = 0.7943, ECE = 0.0862 (≤ 0.10 limit, calibration_ok = true). Learned head beats token probability baseline (AUROC 0.5330) by delta = +0.2613 (95% paired bootstrap CI [0.2043, 0.3163], strictly excludes 0, beats delta_min = 0.03) and beats self-consistency baseline (AUROC 0.5965) by delta = +0.1978 (95% CI [0.1532, 0.2416]). Proposed gate PASSES. Status marked [x] Step 3.

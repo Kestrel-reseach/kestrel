@@ -1,0 +1,44 @@
+{
+  "step": 3,
+  "seed": 20260103,
+  "n_train": 800,
+  "n_validation": 800,
+  "temperature": 2.0,
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "git_commit": "474d8021689843f00682a54acca8b3058018bc5b",
+  "config_hash": "7b7c8836062fb5346ec44f9ddf06a7a3d032e25e43d27fed1e4104596e51dbff",
+  "metrics": {
+    "auroc": 0.79432,
+    "ece": 0.0861669709412933,
+    "selective_accuracy_at_0.8": 0.3671875,
+    "auroc_delta_vs_token_probability": 0.2613018181818182,
+    "auroc_delta_vs_self_consistency": 0.19784000000000002
+  },
+  "baseline_comparison": {
+    "token_probability": {
+      "head_auroc": 0.79432,
+      "baseline_auroc": 0.5330181818181818,
+      "delta": 0.2613018181818182,
+      "ci_low": 0.20428066733485462,
+      "ci_high": 0.3162541184421729
+    },
+    "self_consistency": {
+      "head_auroc": 0.79432,
+      "baseline_auroc": 0.59648,
+      "delta": 0.19784000000000002,
+      "ci_low": 0.15316059473089294,
+      "ci_high": 0.2416294642857143
+    }
+  },
+  "gate_decision": {
+    "ece": 0.0861669709412933,
+    "ece_limit": 0.1,
+    "calibration_ok": true,
+    "best_baseline": "token_probability",
+    "best_delta": 0.2613018181818182,
+    "delta_min": 0.03,
+    "beats_best_baseline": true,
+    "ci_excludes_zero": true,
+    "passes": true
+  }
+}
