@@ -33,6 +33,7 @@ from evaluation.extractors import extract_answer_for_group  # noqa: E402
 from kestrel.halting import (  # noqa: E402
     Attempt,
     compare_strategies,
+    step4_gate_decision,
     tune_threshold,
 )
 from kestrel.verifier import VerifierExample, VerifierFeatures, temperature_scale  # noqa: E402
@@ -315,64 +316,8 @@ def main() -> None:
             f"Abstain Rate = {metrics['abstain_rate']*100:.2f}%"
         )
 
-    # Gate Evaluation (PLAN.md Step 4)
-    # Pass if either:
-    # 1. gated accuracy >= single_pass + 5 pp at no more than 1.5x single-pass energy per correct, OR
-    # 2. gated accuracy matches best-of-three at no more than 60% of its energy per correct.
-    # Kill: if gated does not beat fixed_two_pass at equal compute, drop the gate and keep the fixed rule.
-    single = comparison["single_pass"]
-    two_pass = comparison["fixed_two_pass"]
-    three_pass = comparison["best_of_three"]
-    gated_pol = comparison["gated"]
-
-    cond1_acc = gated_pol["accuracy"] >= (single["accuracy"] + 0.05)
-    cond1_energy = gated_pol["energy_per_correct"] <= (
-        1.5 * single["energy_per_correct"]
-    )
-    cond1_pass = cond1_acc and cond1_energy
-
-    # matches best-of-three within 1 pp non-inferiority
-    cond2_acc = gated_pol["accuracy"] >= (three_pass["accuracy"] - 0.01)
-    cond2_energy = gated_pol["energy_per_correct"] <= (
-        0.60 * three_pass["energy_per_correct"]
-    )
-    cond2_pass = cond2_acc and cond2_energy
-
-    # Kill rule check
-    beats_two_pass = (gated_pol["accuracy"] >= two_pass["accuracy"]) or (
-        gated_pol["energy_per_correct"] < two_pass["energy_per_correct"]
-    )
-
-    passes_gate = (cond1_pass or cond2_pass) and beats_two_pass
-
-    gate_result = {
-        "condition_1_superiority": {
-            "target_min_accuracy": round(single["accuracy"] + 0.05, 4),
-            "actual_accuracy": round(gated_pol["accuracy"], 4),
-            "accuracy_ok": bool(cond1_acc),
-            "energy_cap": round(1.5 * single["energy_per_correct"], 2),
-            "actual_energy_per_correct": round(gated_pol["energy_per_correct"], 2),
-            "energy_ok": bool(cond1_energy),
-            "passes": bool(cond1_pass),
-        },
-        "condition_2_efficiency": {
-            "target_best_of_three_accuracy": round(three_pass["accuracy"], 4),
-            "actual_accuracy": round(gated_pol["accuracy"], 4),
-            "accuracy_matches": bool(cond2_acc),
-            "energy_cap_60_pct": round(0.60 * three_pass["energy_per_correct"], 2),
-            "actual_energy_per_correct": round(gated_pol["energy_per_correct"], 2),
-            "energy_ok": bool(cond2_energy),
-            "passes": bool(cond2_pass),
-        },
-        "kill_check_vs_two_pass": {
-            "fixed_two_pass_accuracy": round(two_pass["accuracy"], 4),
-            "fixed_two_pass_energy": round(two_pass["energy_per_correct"], 2),
-            "gated_accuracy": round(gated_pol["accuracy"], 4),
-            "gated_energy": round(gated_pol["energy_per_correct"], 2),
-            "beats_or_ties": bool(beats_two_pass),
-        },
-        "gate_decision": "PASS" if passes_gate else "FAIL",
-    }
+    # Gate Evaluation (PLAN.md Step 4) -- thresholds frozen, logic in halting.py
+    gate_result = step4_gate_decision(comparison)
 
     print("\nGate Decision Summary:")
     print(json.dumps(gate_result, indent=2))

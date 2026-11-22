@@ -60,10 +60,10 @@
     },
     "kill_check_vs_two_pass": {
       "fixed_two_pass_accuracy": 0.3113,
-      "fixed_two_pass_energy": 626.96,
       "gated_accuracy": 0.2925,
+      "fixed_two_pass_energy": 626.96,
       "gated_energy": 471.17,
-      "beats_or_ties": true
+      "beats_or_ties": false
     },
     "gate_decision": "FAIL"
   }

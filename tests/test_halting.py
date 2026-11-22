@@ -11,6 +11,7 @@ from kestrel.halting import (
     gated,
     self_consistency_at_five,
     single_pass,
+    step4_gate_decision,
     tune_threshold,
 )
 
@@ -109,3 +110,27 @@ def test_compare_strategies_covers_all_policies() -> None:
         "gated",
     }
     assert result["single_pass"]["accuracy"] == 1.0
+
+
+def test_step4_gate_kill_check_uses_accuracy_not_energy() -> None:
+    comparison = {
+        "single_pass": {"accuracy": 0.28, "energy_per_correct": 348.46},
+        "fixed_two_pass": {"accuracy": 0.31125, "energy_per_correct": 626.96},
+        "best_of_three": {"accuracy": 0.3275, "energy_per_correct": 893.77},
+        "gated": {"accuracy": 0.2925, "energy_per_correct": 471.17},
+    }
+    gate = step4_gate_decision(comparison)
+    assert gate["kill_check_vs_two_pass"]["beats_or_ties"] is False
+    assert gate["gate_decision"] == "FAIL"
+
+
+def test_step4_gate_passes_when_gated_beats_fixed_rule() -> None:
+    comparison = {
+        "single_pass": {"accuracy": 0.30, "energy_per_correct": 300.0},
+        "fixed_two_pass": {"accuracy": 0.34, "energy_per_correct": 600.0},
+        "best_of_three": {"accuracy": 0.36, "energy_per_correct": 900.0},
+        "gated": {"accuracy": 0.36, "energy_per_correct": 500.0},
+    }
+    gate = step4_gate_decision(comparison)
+    assert gate["kill_check_vs_two_pass"]["beats_or_ties"] is True
+    assert gate["gate_decision"] == "PASS"
