@@ -101,11 +101,12 @@ def gate_decision(
     """
     calibration_ok = ece <= ece_limit
     best_name = None
-    best_delta = float("-inf")
+    best_auroc = float("-inf")
     for name, entry in comparison.items():
-        if entry["delta"] > best_delta:
+        if entry["baseline_auroc"] > best_auroc:
             best_name = name
-            best_delta = entry["delta"]
+            best_auroc = entry["baseline_auroc"]
+    best_delta = comparison[best_name]["delta"] if best_name is not None else None
     beats_best = best_name is not None and best_delta >= delta_min
     ci_excludes_zero = best_name is not None and comparison[best_name]["ci_low"] > 0
     return {
