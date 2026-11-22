@@ -44,6 +44,25 @@ def test_gate_fails_on_poor_calibration() -> None:
     assert decision["passes"] is False
 
 
+def test_gate_picks_strongest_baseline_not_largest_delta() -> None:
+    comparison = {
+        "weak": {
+            "baseline_auroc": 0.53,
+            "delta": 0.26,
+            "ci_low": 0.20,
+        },
+        "strong": {
+            "baseline_auroc": 0.60,
+            "delta": 0.05,
+            "ci_low": 0.02,
+        },
+    }
+    decision = gate_decision(0.05, comparison)
+    assert decision["best_baseline"] == "strong"
+    assert decision["best_delta"] == 0.05
+    assert decision["passes"] is True
+
+
 def test_calibration_table_counts_and_bins() -> None:
     rows = calibration_table([0.1, 0.2, 0.8, 0.9], [False, False, True, True], bins=2)
     assert len(rows) == 2
