@@ -7,6 +7,7 @@ tests run in CI without model dependencies. Real extraction runs on the RTX
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -94,13 +95,25 @@ class QwenBackend:
             bnb_4bit_use_double_quant=True,
             bnb_4bit_compute_dtype=torch.float16,
         )
-        self._tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self._model = AutoModelForCausalLM.from_pretrained(
-            self.model_name,
-            quantization_config=config,
-            device_map=self.device,
-            trust_remote_code=True,
-        )
+        try:
+            self._tokenizer = AutoTokenizer.from_pretrained(
+                self.model_name, local_files_only=True
+            )
+            self._model = AutoModelForCausalLM.from_pretrained(
+                self.model_name,
+                quantization_config=config,
+                device_map=self.device,
+                trust_remote_code=True,
+                local_files_only=True,
+            )
+        except Exception:
+            self._tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self._model = AutoModelForCausalLM.from_pretrained(
+                self.model_name,
+                quantization_config=config,
+                device_map=self.device,
+                trust_remote_code=True,
+            )
         self._model.eval()
         self._torch = torch
 
@@ -118,6 +131,12 @@ class QwenBackend:
         if samples < 1 or new_tokens < 1:
             raise ValueError("n_samples and max_new_tokens must be positive")
 
+        is_mcq = "Answer with the option letter" in prompt
+        eos_ids = [self._tokenizer.eos_token_id]
+        if is_mcq:
+            eos_ids.extend([198, 271])
+            new_tokens = min(new_tokens, 32)
+
         inputs = self._tokenizer(prompt, return_tensors="pt").to(self.device)
         prompt_len = inputs["input_ids"].shape[1]
         with torch.no_grad():
@@ -129,6 +148,7 @@ class QwenBackend:
                 output_scores=True,
                 return_dict_in_generate=True,
                 pad_token_id=self._tokenizer.eos_token_id,
+                eos_token_id=eos_ids if is_mcq else self._tokenizer.eos_token_id,
             )
 
         # Last-layer, last-token hidden state from a clean pass over the output.
@@ -136,14 +156,25 @@ class QwenBackend:
             full = self._model(
                 input_ids=generated.sequences[:1], output_hidden_states=True
             )
-        hidden = full.hidden_states[-1][0, -1, :].float().cpu().tolist()
 
         # Log-probability of each generated token in the primary sample.
         logprobs = []
         for step, logits in enumerate(generated.scores):
+            if prompt_len + step >= generated.sequences.shape[1]:
+                break
             token_id = generated.sequences[0, prompt_len + step]
-            log_p = torch.log_softmax(logits.float(), dim=-1).gather(0, token_id)
-            logprobs.append(float(log_p.cpu()))
+            log_p = torch.log_softmax(logits[0].float(), dim=-1)[token_id]
+            val = float(log_p.cpu())
+            if math.isfinite(val):
+                logprobs.append(val)
+            if token_id in eos_ids:
+                break
+
+        seq0_end = min(
+            prompt_len + max(1, len(logprobs)) - 1,
+            full.hidden_states[-1].shape[1] - 1,
+        )
+        hidden = full.hidden_states[-1][0, seq0_end, :].float().cpu().tolist()
 
         texts = tuple(
             self._tokenizer.decode(seq[prompt_len:], skip_special_tokens=True)

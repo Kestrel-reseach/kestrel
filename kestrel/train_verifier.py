@@ -26,12 +26,14 @@ from typing import Any
 from kestrel.features import ModelBackend, QwenBackend, to_features
 from kestrel.verifier import (
     VerifierExample,
+    VerifierFeatures,
     evaluate,
     fit_temperature,
     self_consistency_baseline,
     temperature_scale,
     token_probability_baseline,
 )
+from kestrel.verifier_eval import compare_baselines, gate_decision
 from kestrel.verifier_numpy import NumpyLogisticHead
 
 CHECKABLE = ("math", "science_mcq", "code", "knowledge_mcq")
@@ -65,20 +67,78 @@ def load_scorer(eval_dir: str) -> Scorer:
 
 
 def build_examples(
-    items: list[dict[str, Any]], backend: ModelBackend, scorer: Scorer
+    items: list[dict[str, Any]],
+    backend: ModelBackend,
+    scorer: Scorer,
+    split_name: str = "train",
+    cache_path: Path | None = None,
 ) -> list[VerifierExample]:
     """Generate answers and label them for verifier training."""
-    examples = []
-    for item in items:
-        answer = backend.generate(item["prompt"])
-        examples.append(
-            VerifierExample(
-                item_id=item["item_id"],
-                split=item.get("split", "train"),
-                features=to_features(answer),
-                correct=scorer(item, answer.text),
-            )
+    cached: dict[str, VerifierExample] = {}
+    if cache_path and cache_path.is_file():
+        with cache_path.open(encoding="utf-8") as handle:
+            for line in handle:
+                if line.strip():
+                    d = json.loads(line)
+                    cached[d["item_id"]] = VerifierExample(
+                        item_id=d["item_id"],
+                        split=d.get("split", split_name),
+                        features=VerifierFeatures(
+                            last_token_hidden=tuple(d["features"]["last_token_hidden"]),
+                            token_logprobs=tuple(d["features"].get("token_logprobs", ())),
+                            sampled_answers=tuple(d["features"].get("sampled_answers", ())),
+                            stated_confidence=d["features"].get("stated_confidence"),
+                        ),
+                        correct=d["correct"],
+                    )
+
+    if cached and cache_path:
+        print(
+            f"  Loaded {len(cached)} existing examples from {cache_path.name}",
+            flush=True,
         )
+
+    examples = []
+    total = len(items)
+    for idx, item in enumerate(items, 1):
+        item_id = item["item_id"]
+        if item_id in cached:
+            examples.append(cached[item_id])
+            continue
+
+        answer = backend.generate(item["prompt"])
+        correct = scorer(item, answer.text)
+        features = to_features(answer)
+        example = VerifierExample(
+            item_id=item_id,
+            split=item.get("split", split_name),
+            features=features,
+            correct=correct,
+        )
+        examples.append(example)
+
+        if cache_path:
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            with cache_path.open("a", encoding="utf-8") as handle:
+                record = {
+                    "item_id": item_id,
+                    "split": example.split,
+                    "correct": example.correct,
+                    "features": {
+                        "last_token_hidden": list(features.last_token_hidden),
+                        "token_logprobs": list(features.token_logprobs),
+                        "sampled_answers": list(features.sampled_answers),
+                        "stated_confidence": features.stated_confidence,
+                    },
+                }
+                handle.write(json.dumps(record) + "\n")
+
+        computed_count = idx - len(cached)
+        if computed_count % 25 == 0 or idx == total or computed_count <= 3:
+            print(
+                f"  [{idx}/{total}] ({split_name}) {item_id}: correct={correct}",
+                flush=True,
+            )
     return examples
 
 
@@ -93,8 +153,16 @@ def run(
     """Train, calibrate and evaluate; write a JSON summary."""
     train_items = load_items(train_dir, CHECKABLE)
     validation_items = load_items(validation_dir, CHECKABLE)
-    train = build_examples(train_items, backend, scorer)
-    validation = build_examples(validation_items, backend, scorer)
+
+    train_cache = output.parent / ".cache_train_examples.jsonl"
+    val_cache = output.parent / ".cache_val_examples.jsonl"
+
+    print(f"Building training examples ({len(train_items)} items)...", flush=True)
+    train = build_examples(train_items, backend, scorer, "train", train_cache)
+    print(f"Building validation examples ({len(validation_items)} items)...", flush=True)
+    validation = build_examples(
+        validation_items, backend, scorer, "validation", val_cache
+    )
 
     head = NumpyLogisticHead()
     head.fit(train)
@@ -112,6 +180,9 @@ def run(
         ],
     }
     results = evaluate(calibrated, labels, baselines=baselines)
+    comparison = compare_baselines(calibrated, labels, baselines, seed=seed)
+    gate = gate_decision(results["ece"], comparison)
+
     payload = {
         "step": 3,
         "seed": seed,
@@ -129,6 +200,8 @@ def run(
             ).encode()
         ).hexdigest(),
         "metrics": results,
+        "baseline_comparison": comparison,
+        "gate_decision": gate,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -151,6 +224,7 @@ def main() -> None:
         args.train, args.validation, args.out, backend, load_scorer(args.eval_dir)
     )
     print(json.dumps(results["metrics"], indent=2))
+    print("Gate decision:", json.dumps(results["gate_decision"], indent=2))
 
 
 if __name__ == "__main__":
