@@ -23,6 +23,7 @@ __all__ = [
     "best_of_three",
     "compare_strategies",
     "evaluate_policy",
+    "step4_gate_decision",
     "fixed_two_pass",
     "gated",
     "self_consistency_at_five",
@@ -192,4 +193,60 @@ def compare_strategies(
     return {
         name: evaluate_policy(source, item_ids, policy)
         for name, policy in policies.items()
+    }
+
+
+def step4_gate_decision(comparison: dict[str, dict[str, float]]) -> dict[str, object]:
+    """Apply the frozen Step 4 pass/kill rules to policy metrics.
+
+    Pass if gated accuracy is >= single-pass + 5 pp at <= 1.5x its energy, OR
+    gated matches fixed best-of-three (within 1 pp) at <= 60% of its energy.
+    Kill: if gated does not beat fixed two-pass on accuracy, drop the gate.
+    The kill comparison uses accuracy only; cheaper energy alone does not
+    count as beating the fixed rule. Thresholds are frozen -- never retune
+    after seeing results.
+    """
+    single = comparison["single_pass"]
+    two_pass = comparison["fixed_two_pass"]
+    three_pass = comparison["best_of_three"]
+    gated_policy = comparison["gated"]
+
+    cond1_acc = gated_policy["accuracy"] >= single["accuracy"] + 0.05
+    cond1_energy = (
+        gated_policy["energy_per_correct"] <= 1.5 * single["energy_per_correct"]
+    )
+    cond2_acc = gated_policy["accuracy"] >= three_pass["accuracy"] - 0.01
+    cond2_energy = (
+        gated_policy["energy_per_correct"] <= 0.60 * three_pass["energy_per_correct"]
+    )
+    beats_two_pass = gated_policy["accuracy"] >= two_pass["accuracy"]
+    passes = (cond1_acc and cond1_energy) or (cond2_acc and cond2_energy)
+
+    return {
+        "condition_1_superiority": {
+            "target_min_accuracy": round(single["accuracy"] + 0.05, 4),
+            "actual_accuracy": round(gated_policy["accuracy"], 4),
+            "accuracy_ok": bool(cond1_acc),
+            "energy_cap": round(1.5 * single["energy_per_correct"], 2),
+            "actual_energy_per_correct": round(gated_policy["energy_per_correct"], 2),
+            "energy_ok": bool(cond1_energy),
+            "passes": bool(cond1_acc and cond1_energy),
+        },
+        "condition_2_efficiency": {
+            "target_best_of_three_accuracy": round(three_pass["accuracy"], 4),
+            "actual_accuracy": round(gated_policy["accuracy"], 4),
+            "accuracy_matches": bool(cond2_acc),
+            "energy_cap_60_pct": round(0.60 * three_pass["energy_per_correct"], 2),
+            "actual_energy_per_correct": round(gated_policy["energy_per_correct"], 2),
+            "energy_ok": bool(cond2_energy),
+            "passes": bool(cond2_acc and cond2_energy),
+        },
+        "kill_check_vs_two_pass": {
+            "fixed_two_pass_accuracy": round(two_pass["accuracy"], 4),
+            "gated_accuracy": round(gated_policy["accuracy"], 4),
+            "fixed_two_pass_energy": round(two_pass["energy_per_correct"], 2),
+            "gated_energy": round(gated_policy["energy_per_correct"], 2),
+            "beats_or_ties": bool(beats_two_pass),
+        },
+        "gate_decision": "PASS" if passes and beats_two_pass else "FAIL",
     }
