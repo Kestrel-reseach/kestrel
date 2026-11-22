@@ -1,0 +1,70 @@
+{
+  "step": 4,
+  "seed": 20260104,
+  "n_validation": 800,
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "energy_label": "Relative energy only; GPU NVML scope; same machine and session; not comparable across machines.",
+  "energy_per_pass_joules": 97.57,
+  "chosen_threshold": 0.1,
+  "max_passes": 3,
+  "policy_metrics": {
+    "single_pass": {
+      "accuracy": 0.28,
+      "energy_per_correct": 348.4642857142857,
+      "passes": 1.0,
+      "abstain_rate": 0.0
+    },
+    "fixed_two_pass": {
+      "accuracy": 0.31125,
+      "energy_per_correct": 626.9558232931727,
+      "passes": 2.0,
+      "abstain_rate": 0.0
+    },
+    "best_of_three": {
+      "accuracy": 0.3275,
+      "energy_per_correct": 893.7709923664121,
+      "passes": 3.0,
+      "abstain_rate": 0.0
+    },
+    "self_consistency_at_five": {
+      "accuracy": 0.29875,
+      "energy_per_correct": 1632.9707112970711,
+      "passes": 5.0,
+      "abstain_rate": 0.0
+    },
+    "gated": {
+      "accuracy": 0.2925,
+      "energy_per_correct": 471.1713675213675,
+      "passes": 1.4125,
+      "abstain_rate": 0.075
+    }
+  },
+  "gate": {
+    "condition_1_superiority": {
+      "target_min_accuracy": 0.33,
+      "actual_accuracy": 0.2925,
+      "accuracy_ok": false,
+      "energy_cap": 522.7,
+      "actual_energy_per_correct": 471.17,
+      "energy_ok": true,
+      "passes": false
+    },
+    "condition_2_efficiency": {
+      "target_best_of_three_accuracy": 0.3275,
+      "actual_accuracy": 0.2925,
+      "accuracy_matches": false,
+      "energy_cap_60_pct": 536.26,
+      "actual_energy_per_correct": 471.17,
+      "energy_ok": true,
+      "passes": false
+    },
+    "kill_check_vs_two_pass": {
+      "fixed_two_pass_accuracy": 0.3113,
+      "fixed_two_pass_energy": 626.96,
+      "gated_accuracy": 0.2925,
+      "gated_energy": 471.17,
+      "beats_or_ties": true
+    },
+    "gate_decision": "FAIL"
+  }
+}
