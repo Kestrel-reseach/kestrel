@@ -85,8 +85,12 @@ def build_examples(
                         split=d.get("split", split_name),
                         features=VerifierFeatures(
                             last_token_hidden=tuple(d["features"]["last_token_hidden"]),
-                            token_logprobs=tuple(d["features"].get("token_logprobs", ())),
-                            sampled_answers=tuple(d["features"].get("sampled_answers", ())),
+                            token_logprobs=tuple(
+                                d["features"].get("token_logprobs", ())
+                            ),
+                            sampled_answers=tuple(
+                                d["features"].get("sampled_answers", ())
+                            ),
                             stated_confidence=d["features"].get("stated_confidence"),
                         ),
                         correct=d["correct"],
@@ -159,7 +163,9 @@ def run(
 
     print(f"Building training examples ({len(train_items)} items)...", flush=True)
     train = build_examples(train_items, backend, scorer, "train", train_cache)
-    print(f"Building validation examples ({len(validation_items)} items)...", flush=True)
+    print(
+        f"Building validation examples ({len(validation_items)} items)...", flush=True
+    )
     validation = build_examples(
         validation_items, backend, scorer, "validation", val_cache
     )
