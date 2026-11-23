@@ -1,0 +1,90 @@
+{
+  "step": 5,
+  "seed": 20260104,
+  "n_validation_items": 300,
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "quantization": "bitsandbytes 4-bit NF4",
+  "energy_label": "Relative energy only; GPU NVML scope; same machine and session; not comparable across machines.",
+  "store": {
+    "corpus_documents": 6065,
+    "vectorizer": "sentence-transformers/all-MiniLM-L6-v2 (CPU, d=384)",
+    "one_time_build_seconds": 78.5,
+    "one_time_build_energy_joules": 482.34,
+    "disk_bytes": 15987358,
+    "disk_mb": 15.25,
+    "resident_bytes": 6238705,
+    "resident_mb": 5.95,
+    "ssd_lookup_latency_mean_ms": 174.56,
+    "ssd_lookup_latency_p50_ms": 173.56,
+    "ssd_lookup_latency_p95_ms": 179.75
+  },
+  "read_policy_comparison": {
+    "threshold": 0.1,
+    "always_read": {
+      "bytes_read": 2794754400,
+      "latency_ms": 52129.08,
+      "reads": 300,
+      "mean_latency_ms": 173.76
+    },
+    "gated_read": {
+      "bytes_read": 2356909544,
+      "latency_ms": 41625.17,
+      "reads": 253,
+      "mean_latency_ms": 164.53
+    },
+    "bytes_saved_pct": 15.67,
+    "latency_saved_pct": 20.15
+  },
+  "performance_comparison": {
+    "no_store": {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct (4-bit NF4, closed-book)",
+      "accuracy": 0.05,
+      "energy_per_correct_joules": 1951.4,
+      "resident_gb": 1.383,
+      "accuracy_per_resident_gb": 0.0362
+    },
+    "with_store": {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct (4-bit NF4) + SSD Knowledge Store",
+      "accuracy": 0.7167,
+      "energy_per_correct_joules": 137.02,
+      "resident_gb": 1.385,
+      "accuracy_per_resident_gb": 0.5174,
+      "ssd_read_latency_mean_ms": 174.56,
+      "ssd_read_energy_per_query_joules": 0.63
+    },
+    "larger_no_store": {
+      "model": "SmolLM2-1.7B-Instruct (4-bit NF4, no store)",
+      "accuracy": 0.04,
+      "resident_gb": 1.533,
+      "accuracy_per_resident_gb": 0.0261
+    }
+  },
+  "gate": {
+    "condition_1_accuracy_gain": {
+      "no_store_accuracy_pct": 5.0,
+      "with_store_accuracy_pct": 71.67,
+      "gain_pp": 66.67,
+      "target_min_gain_pp": 10.0,
+      "passes": true
+    },
+    "condition_1_energy": {
+      "no_store_energy_per_correct_joules": 1951.4,
+      "with_store_energy_per_correct_joules": 137.02,
+      "energy_cap_1_3x_joules": 2536.82,
+      "passes": true
+    },
+    "condition_2_accuracy_per_resident_gb": {
+      "with_store_accuracy_per_gb_pct": 51.74,
+      "larger_no_store_accuracy_per_gb_pct": 2.61,
+      "beats_larger_no_store": true
+    },
+    "kill_check": {
+      "gain_pp": 66.67,
+      "kill_threshold_pp": 3.0,
+      "mean_lookup_latency_ms": 174.56,
+      "baseline_p50_latency_budget_ms": 622.9,
+      "passes": true
+    },
+    "gate_decision": "PASS"
+  }
+}
