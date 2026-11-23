@@ -1,0 +1,96 @@
+{
+  "step": 6,
+  "seed": 20260104,
+  "n_validation_items": 150,
+  "n_stale_fact_items": 100,
+  "n_static_fact_items": 50,
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "quantization": "bitsandbytes 4-bit NF4",
+  "context_length": 2048,
+  "energy_label": "Relative energy only; GPU NVML scope; same machine and session; not comparable across machines.",
+  "frontier_reference": {
+    "status": "F = gemini-2.5-pro free tier, not run yet (D20)",
+    "f_no_history_expected": 0.0,
+    "f_full_history_target_bound_pct": 90.0
+  },
+  "systems": {
+    "no_memory": {
+      "accuracy": 0.0267,
+      "accuracy_pct": 2.67,
+      "correct": 4,
+      "total": 150,
+      "stale_accuracy_pct": 1.0,
+      "static_accuracy_pct": 6.0,
+      "stale_fact_errors": 2,
+      "stale_fact_error_rate_pct": 2.0,
+      "total_net_energy_joules": 2848.64,
+      "energy_per_correct_joules": 712.16
+    },
+    "plain_memory": {
+      "accuracy": 0.8,
+      "accuracy_pct": 80.0,
+      "correct": 120,
+      "total": 150,
+      "stale_accuracy_pct": 72.0,
+      "static_accuracy_pct": 96.0,
+      "stale_fact_errors": 28,
+      "stale_fact_error_rate_pct": 28.0,
+      "total_net_energy_joules": 2538.66,
+      "energy_per_correct_joules": 21.16
+    },
+    "gated_memory": {
+      "accuracy": 0.96,
+      "accuracy_pct": 96.0,
+      "correct": 144,
+      "total": 150,
+      "stale_accuracy_pct": 96.0,
+      "static_accuracy_pct": 96.0,
+      "stale_fact_errors": 0,
+      "stale_fact_error_rate_pct": 0.0,
+      "total_net_energy_joules": 2492.87,
+      "energy_per_correct_joules": 17.31
+    }
+  },
+  "comparison": {
+    "accuracy_gain_over_plain_pp": 16.0,
+    "paired_bootstrap_ci_95": [
+      10.0,
+      22.0
+    ],
+    "static_forgetting_pp": 0.0,
+    "stale_fact_error_reduction_ratio": 0.0,
+    "plain_stale_errors": 28,
+    "gated_stale_errors": 0,
+    "stale_error_target_max": 14
+  },
+  "gate": {
+    "condition_1_accuracy_gain": {
+      "gain_pp": 16.0,
+      "target_min_gain_pp": 5.0,
+      "passes": true
+    },
+    "condition_2_ci_excludes_zero": {
+      "ci_lower_pp": 10.0,
+      "ci_upper_pp": 22.0,
+      "excludes_zero": true
+    },
+    "condition_3_forgetting": {
+      "static_forgetting_pp": 0.0,
+      "forgetting_cap_pp": 3.0,
+      "passes": true
+    },
+    "condition_4_stale_errors": {
+      "plain_stale_errors": 28,
+      "gated_stale_errors": 0,
+      "stale_error_target_max": 14,
+      "passes": true
+    },
+    "kill_check": {
+      "reduces_stale_errors": true,
+      "rule": "If gating does not reduce stale errors, keep plain memory with timestamps and say so.",
+      "passes": true
+    },
+    "gate_decision": "PASS",
+    "recommended_component": "gated_memory"
+  }
+}
