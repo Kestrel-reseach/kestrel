@@ -137,6 +137,8 @@ class KnowledgeStore:
 
         if not self.chunks_path.is_file():
             raise FileNotFoundError(self.chunks_path)
+        if self._chunks:
+            return
         self._chunks = []
         with self.chunks_path.open(encoding="utf-8") as handle:
             for line in handle:
