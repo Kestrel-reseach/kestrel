@@ -16,10 +16,13 @@ knowledge_store.py.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 __all__ = [
+    "CalibratedVerifierAdapter",
     "Decision",
+    "GatedMemoryAdapter",
+    "KnowledgeStoreRetriever",
     "Memory",
     "Retriever",
     "Router",
@@ -59,6 +62,64 @@ class Memory(Protocol):
     def recall(self, query: str) -> str:
         """Return relevant memory text (empty when none)."""
         ...
+
+
+class CalibratedVerifierAdapter:
+    """Adapts a verifier head or scoring function to the Verifier protocol."""
+
+    def __init__(
+        self,
+        head: Any = None,
+        temperature: float = 2.0,
+        feature_fn: Any = None,
+        score_fn: Any = None,
+    ) -> None:
+        self.head = head
+        self.temperature = temperature
+        self.feature_fn = feature_fn
+        self.score_fn = score_fn
+
+    def score(self, query: str, answer: str) -> float:
+        """Return a calibrated correctness probability in [0, 1]."""
+        if self.score_fn is not None:
+            return float(self.score_fn(query, answer))
+        if self.head is not None and self.feature_fn is not None:
+            features = self.feature_fn(query, answer)
+            raw_score = float(self.head.predict(features))
+            if self.temperature != 1.0 and 0.0 < raw_score < 1.0:
+                import math
+
+                logit = math.log(raw_score / (1.0 - raw_score))
+                scaled_logit = logit / self.temperature
+                return 1.0 / (1.0 + math.exp(-scaled_logit))
+            return raw_score
+        return 0.5
+
+
+class KnowledgeStoreRetriever:
+    """Adapts KnowledgeStore (Step 5) to the Retriever protocol."""
+
+    def __init__(self, store: Any) -> None:
+        self.store = store
+
+    def retrieve(self, query: str) -> tuple[str, int]:
+        """Retrieve top context and return (context, bytes_read)."""
+        result = self.store.lookup(query)
+        if result is None:
+            return "", 0
+        chunk_text = result.chunk.text if result.chunk else ""
+        return chunk_text, int(result.bytes_read)
+
+
+class GatedMemoryAdapter:
+    """Adapts WriteGatedMemory (Step 6) to the Memory protocol."""
+
+    def __init__(self, memory: Any) -> None:
+        self.memory = memory
+
+    def recall(self, query: str) -> str:
+        """Recall relevant verified memory text (empty when none)."""
+        return str(self.memory.recall(query))
 
 
 class Router:

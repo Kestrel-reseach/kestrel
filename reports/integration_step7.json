@@ -1,0 +1,384 @@
+{
+  "step": 7,
+  "seed": 20260107,
+  "n_validation": 1250,
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "quantization": "bitsandbytes 4-bit NF4",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7435HS",
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU (4 GB)",
+    "test_tier": "accepted test tier"
+  },
+  "energy_label": "Relative energy only; GPU NVML scope; same machine and session; not comparable across machines.",
+  "configurations": {
+    "p1_integrated": {
+      "accuracy": 0.4864,
+      "accuracy_pct": 48.64,
+      "correct": 608,
+      "total": 1250,
+      "wilson_ci_95": [
+        45.88,
+        51.41
+      ],
+      "total_energy_joules": 188064.17,
+      "joules_per_correct": 309.32,
+      "resident_gb": 1.385,
+      "latency_mean_ms": 1073.46,
+      "latency_p50_ms": 1300.0,
+      "latency_p95_ms": 1300.0,
+      "sections": {
+        "checkable": {
+          "correct": 249,
+          "total": 800,
+          "accuracy_pct": 31.13,
+          "wilson_ci_95": [
+            28.01,
+            34.42
+          ]
+        },
+        "store": {
+          "correct": 215,
+          "total": 300,
+          "accuracy_pct": 71.67,
+          "wilson_ci_95": [
+            66.32,
+            76.47
+          ]
+        },
+        "memory": {
+          "correct": 144,
+          "total": 150,
+          "accuracy_pct": 96.0,
+          "wilson_ci_95": [
+            91.55,
+            98.15
+          ]
+        }
+      }
+    },
+    "ablation_no_verifier": {
+      "accuracy": 0.4472,
+      "accuracy_pct": 44.72,
+      "correct": 559,
+      "total": 1250,
+      "wilson_ci_95": [
+        41.98,
+        47.49
+      ],
+      "total_energy_joules": 188109.96,
+      "joules_per_correct": 336.51,
+      "resident_gb": 1.385,
+      "latency_mean_ms": 1074.31,
+      "latency_p50_ms": 1300.0,
+      "latency_p95_ms": 1300.0,
+      "sections": {
+        "checkable": {
+          "correct": 224,
+          "total": 800,
+          "accuracy_pct": 28.0,
+          "wilson_ci_95": [
+            25.0,
+            31.21
+          ]
+        },
+        "store": {
+          "correct": 215,
+          "total": 300,
+          "accuracy_pct": 71.67,
+          "wilson_ci_95": [
+            66.32,
+            76.47
+          ]
+        },
+        "memory": {
+          "correct": 120,
+          "total": 150,
+          "accuracy_pct": 80.0,
+          "wilson_ci_95": [
+            72.89,
+            85.62
+          ]
+        }
+      }
+    },
+    "ablation_no_knowledge_store": {
+      "accuracy": 0.3264,
+      "accuracy_pct": 32.64,
+      "correct": 408,
+      "total": 1250,
+      "wilson_ci_95": [
+        30.1,
+        35.29
+      ],
+      "total_energy_joules": 187875.87,
+      "joules_per_correct": 460.48,
+      "resident_gb": 1.383,
+      "latency_mean_ms": 1031.56,
+      "latency_p50_ms": 1300.0,
+      "latency_p95_ms": 1300.0,
+      "sections": {
+        "checkable": {
+          "correct": 249,
+          "total": 800,
+          "accuracy_pct": 31.13,
+          "wilson_ci_95": [
+            28.01,
+            34.42
+          ]
+        },
+        "store": {
+          "correct": 15,
+          "total": 300,
+          "accuracy_pct": 5.0,
+          "wilson_ci_95": [
+            3.05,
+            8.08
+          ]
+        },
+        "memory": {
+          "correct": 144,
+          "total": 150,
+          "accuracy_pct": 96.0,
+          "wilson_ci_95": [
+            91.55,
+            98.15
+          ]
+        }
+      }
+    },
+    "ablation_no_memory": {
+      "accuracy": 0.3744,
+      "accuracy_pct": 37.44,
+      "correct": 468,
+      "total": 1250,
+      "wilson_ci_95": [
+        34.8,
+        40.16
+      ],
+      "total_energy_joules": 188419.94,
+      "joules_per_correct": 402.61,
+      "resident_gb": 1.385,
+      "latency_mean_ms": 1089.23,
+      "latency_p50_ms": 1300.0,
+      "latency_p95_ms": 1300.0,
+      "sections": {
+        "checkable": {
+          "correct": 249,
+          "total": 800,
+          "accuracy_pct": 31.13,
+          "wilson_ci_95": [
+            28.01,
+            34.42
+          ]
+        },
+        "store": {
+          "correct": 215,
+          "total": 300,
+          "accuracy_pct": 71.67,
+          "wilson_ci_95": [
+            66.32,
+            76.47
+          ]
+        },
+        "memory": {
+          "correct": 4,
+          "total": 150,
+          "accuracy_pct": 2.67,
+          "wilson_ci_95": [
+            1.04,
+            6.66
+          ]
+        }
+      }
+    },
+    "ablation_no_fixed_two_pass": {
+      "accuracy": 0.4664,
+      "accuracy_pct": 46.64,
+      "correct": 583,
+      "total": 1250,
+      "wilson_ci_95": [
+        43.89,
+        49.41
+      ],
+      "total_energy_joules": 110008.17,
+      "joules_per_correct": 188.69,
+      "resident_gb": 1.385,
+      "latency_mean_ms": 657.46,
+      "latency_p50_ms": 650.0,
+      "latency_p95_ms": 798.93,
+      "sections": {
+        "checkable": {
+          "correct": 224,
+          "total": 800,
+          "accuracy_pct": 28.0,
+          "wilson_ci_95": [
+            25.0,
+            31.21
+          ]
+        },
+        "store": {
+          "correct": 215,
+          "total": 300,
+          "accuracy_pct": 71.67,
+          "wilson_ci_95": [
+            66.32,
+            76.47
+          ]
+        },
+        "memory": {
+          "correct": 144,
+          "total": 150,
+          "accuracy_pct": 96.0,
+          "wilson_ci_95": [
+            91.55,
+            98.15
+          ]
+        }
+      }
+    }
+  },
+  "section_gates": {
+    "target": "at most 3 pp regression vs earlier steps",
+    "sections": {
+      "checkable": {
+        "earlier_step_source": "Step 4 fixed_two_pass",
+        "earlier_accuracy_pct": 31.13,
+        "integrated_accuracy_pct": 31.13,
+        "regression_pp": 0.0,
+        "max_allowed_regression_pp": 3.0,
+        "passes": true
+      },
+      "store": {
+        "earlier_step_source": "Step 5 with_store",
+        "earlier_accuracy_pct": 71.67,
+        "integrated_accuracy_pct": 71.67,
+        "regression_pp": 0.0,
+        "max_allowed_regression_pp": 3.0,
+        "passes": true
+      },
+      "memory": {
+        "earlier_step_source": "Step 6 gated_memory",
+        "earlier_accuracy_pct": 96.0,
+        "integrated_accuracy_pct": 96.0,
+        "regression_pp": 0.0,
+        "max_allowed_regression_pp": 3.0,
+        "passes": true
+      }
+    },
+    "gate_decision": "PASS"
+  },
+  "kill_checks": {
+    "rule": "any component whose removal does not hurt accuracy or energy is removed",
+    "components": {
+      "verifier": {
+        "component": "Step 3 Verifier Head",
+        "removal_accuracy_pct": 44.72,
+        "accuracy_delta_pp": -3.92,
+        "hurts_accuracy": true,
+        "note": "Removing verifier drops accuracy by 3.92 pp and increases memory stale-fact errors from 0 to 28.",
+        "decision": "KEEP"
+      },
+      "knowledge_store": {
+        "component": "Step 5 SSD Knowledge Store",
+        "removal_accuracy_pct": 32.64,
+        "accuracy_delta_pp": -16.0,
+        "removal_joules_per_correct": 460.48,
+        "energy_increase_pct": 48.87,
+        "hurts_accuracy": true,
+        "hurts_energy": true,
+        "note": "Removing store drops accuracy by 16.00 pp and worsens energy per correct by +48.9%.",
+        "decision": "KEEP"
+      },
+      "memory": {
+        "component": "Step 6 Write-Gated Memory",
+        "removal_accuracy_pct": 37.44,
+        "accuracy_delta_pp": -11.2,
+        "removal_joules_per_correct": 402.61,
+        "energy_increase_pct": 30.16,
+        "hurts_accuracy": true,
+        "hurts_energy": true,
+        "note": "Removing memory drops accuracy by 11.20 pp and worsens energy per correct by +30.2%.",
+        "decision": "KEEP"
+      },
+      "fixed_two_pass": {
+        "component": "Step 4 Fixed Two-Pass Halting",
+        "removal_accuracy_pct": 46.64,
+        "accuracy_delta_pp": -2.0,
+        "checkable_accuracy_delta_pp": -3.13,
+        "hurts_accuracy": true,
+        "note": "Removing fixed two-pass drops checkable accuracy by 3.13 pp (28.00% vs 31.13%) and full suite by 2.00 pp.",
+        "decision": "KEEP"
+      }
+    },
+    "all_components_kept": true,
+    "killed_components": [],
+    "decision": "ALL_COMPONENTS_KEPT"
+  },
+  "frontier_reference": {
+    "frontier_model": "Google AI Studio gemini-flash-lite-latest (free tier, D21)",
+    "frontier_role": "Free-tier reference, not current frontier (per D21/PLAN.md)",
+    "resolved_caveats": [
+      "Root cause of F code 0/100 was markdown fence stripping before ast.parse; fixed in shared extractor and rescored to 72/100 (CI [63, 80]%).",
+      "Matched scope aligned strictly with G-Q group set (math, science_mcq, knowledge_mcq, code): F = 649/800 = 81.12% (CI [78.38, 83.75]%).",
+      "B-LLM 800 checkable records verified under fixed extractor: 455/800 = 56.88% (CI [53.42, 60.27]%).",
+      "Authoritative G-F gap denominator: 81.12% - 56.88% = 24.24 pp.",
+      "knowledge_qa (196/300 = 65.33%) reported separately as store group, excluded from G-Q/G-F scope."
+    ],
+    "metrics": {
+      "matched_g_q_scope_800": {
+        "f_correct": 649,
+        "f_total": 800,
+        "f_accuracy_pct": 81.12,
+        "f_wilson_ci_95": [
+          78.38,
+          83.75
+        ],
+        "b_llm_correct": 455,
+        "b_llm_total": 800,
+        "b_llm_accuracy_pct": 56.88,
+        "b_llm_wilson_ci_95": [
+          53.42,
+          60.27
+        ],
+        "g_f_gap_denominator_pp": 24.24,
+        "p1_integrated_correct": 249,
+        "p1_integrated_total": 800,
+        "p1_integrated_accuracy_pct": 31.13
+      },
+      "store_group_knowledge_qa_300": {
+        "f_correct": 196,
+        "f_total": 300,
+        "f_accuracy_pct": 65.33,
+        "p1_integrated_correct": 215,
+        "p1_integrated_total": 300,
+        "p1_integrated_accuracy_pct": 71.67,
+        "p1_advantage_over_f_pp": 6.34
+      },
+      "memory_probe_group_150": {
+        "f_full_history_correct": 135,
+        "f_full_history_total": 150,
+        "f_full_history_accuracy_pct": 90.0,
+        "p1_integrated_correct": 144,
+        "p1_integrated_total": 150,
+        "p1_integrated_accuracy_pct": 96.0,
+        "p1_advantage_over_f_pp": 6.0
+      },
+      "full_suite_1250": {
+        "f_correct": 980,
+        "f_total": 1250,
+        "f_accuracy_pct": 78.4,
+        "f_wilson_ci_95": [
+          76.04,
+          80.6
+        ],
+        "p1_integrated_correct": 608,
+        "p1_integrated_total": 1250,
+        "p1_integrated_accuracy_pct": 48.64,
+        "p1_integrated_wilson_ci_95": [
+          45.88,
+          51.41
+        ]
+      }
+    }
+  }
+}
