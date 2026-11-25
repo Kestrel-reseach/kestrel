@@ -9,19 +9,44 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 from kestrel.verifier import VerifierFeatures
 
 __all__ = [
     "DEFAULT_MODEL",
+    "GROUP_CAPS",
     "GeneratedAnswer",
     "ModelBackend",
     "QwenBackend",
+    "format_item_prompt",
     "to_features",
 ]
 
 DEFAULT_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
+GROUP_CAPS: dict[str, int] = {
+    "math": 768,
+    "science_mcq": 32,
+    "knowledge_mcq": 32,
+    "code": 1024,
+}
+
+
+def format_item_prompt(item: dict[str, Any], tokenizer: Any = None) -> tuple[str, int]:
+    """Format an evaluation item using kestrel-eval's canonical chat template and cap.
+
+    Prevents the raw-prompt bug where Qwen2.5-Instruct treats unformatted prompts as
+    raw completion, omits MCQ assistant prefills, or omits code entry_point names.
+    """
+    group = str(item.get("group", ""))
+    cap = GROUP_CAPS.get(group, 256)
+    try:
+        from evaluation.prompts import format_prompt_for_model
+
+        prompt_str, _, _ = format_prompt_for_model(item, tokenizer=tokenizer)
+        return prompt_str, cap
+    except ImportError:
+        return str(item.get("prompt", "")), cap
 
 
 @dataclass(frozen=True)
@@ -117,6 +142,21 @@ class QwenBackend:
         self._model.eval()
         self._torch = torch
 
+    def generate_for_item(
+        self,
+        item: dict[str, Any],
+        n_samples: int | None = None,
+        max_new_tokens: int | None = None,
+    ) -> GeneratedAnswer:
+        """Format item with canonical chat template/group cap and generate."""
+        self._load()
+        prompt_str, cap = format_item_prompt(item, tokenizer=self._tokenizer)
+        return self.generate(
+            prompt_str,
+            n_samples=n_samples,
+            max_new_tokens=cap if max_new_tokens is None else max_new_tokens,
+        )
+
     def generate(
         self,
         prompt: str,
@@ -131,7 +171,9 @@ class QwenBackend:
         if samples < 1 or new_tokens < 1:
             raise ValueError("n_samples and max_new_tokens must be positive")
 
-        is_mcq = "Answer with the option letter" in prompt
+        is_mcq = "Answer with the option letter" in prompt or prompt.rstrip().endswith(
+            "Answer:"
+        )
         eos_ids = [self._tokenizer.eos_token_id]
         if is_mcq:
             eos_ids.extend([198, 271])

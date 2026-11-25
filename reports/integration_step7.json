@@ -12,29 +12,53 @@
   "energy_label": "Relative energy only; GPU NVML scope; same machine and session; not comparable across machines.",
   "configurations": {
     "p1_integrated": {
-      "accuracy": 0.4864,
-      "accuracy_pct": 48.64,
-      "correct": 608,
+      "accuracy": 0.656,
+      "accuracy_pct": 65.6,
+      "correct": 820,
       "total": 1250,
       "wilson_ci_95": [
-        45.88,
-        51.41
+        62.92,
+        68.18
       ],
-      "total_energy_joules": 188064.17,
-      "joules_per_correct": 309.32,
+      "total_energy_joules": 168878.05,
+      "joules_per_correct": 205.95,
       "resident_gb": 1.385,
-      "latency_mean_ms": 1073.46,
-      "latency_p50_ms": 1300.0,
-      "latency_p95_ms": 1300.0,
+      "latency_mean_ms": 4629.28,
+      "latency_p50_ms": 793.65,
+      "latency_p95_ms": 24234.74,
       "sections": {
         "checkable": {
-          "correct": 249,
+          "correct": 461,
           "total": 800,
-          "accuracy_pct": 31.13,
+          "accuracy_pct": 57.63,
           "wilson_ci_95": [
-            28.01,
-            34.42
-          ]
+            54.17,
+            61.0
+          ],
+          "net_energy_joules": 136925.89,
+          "joules_per_correct": 297.02,
+          "groups": {
+            "math": {
+              "correct": 136,
+              "total": 200,
+              "accuracy_pct": 68.0
+            },
+            "science_mcq": {
+              "correct": 128,
+              "total": 200,
+              "accuracy_pct": 64.0
+            },
+            "knowledge_mcq": {
+              "correct": 149,
+              "total": 300,
+              "accuracy_pct": 49.67
+            },
+            "code": {
+              "correct": 48,
+              "total": 100,
+              "accuracy_pct": 48.0
+            }
+          }
         },
         "store": {
           "correct": 215,
@@ -52,34 +76,59 @@
           "wilson_ci_95": [
             91.55,
             98.15
-          ]
+          ],
+          "stale_fact_errors": 0
         }
       }
     },
     "ablation_no_verifier": {
-      "accuracy": 0.4472,
-      "accuracy_pct": 44.72,
-      "correct": 559,
+      "accuracy": 0.632,
+      "accuracy_pct": 63.2,
+      "correct": 790,
       "total": 1250,
       "wilson_ci_95": [
-        41.98,
-        47.49
+        60.49,
+        65.83
       ],
-      "total_energy_joules": 188109.96,
-      "joules_per_correct": 336.51,
+      "total_energy_joules": 168923.85,
+      "joules_per_correct": 213.83,
       "resident_gb": 1.385,
-      "latency_mean_ms": 1074.31,
-      "latency_p50_ms": 1300.0,
-      "latency_p95_ms": 1300.0,
+      "latency_mean_ms": 4630.13,
+      "latency_p50_ms": 787.26,
+      "latency_p95_ms": 24234.74,
       "sections": {
         "checkable": {
-          "correct": 224,
+          "correct": 455,
           "total": 800,
-          "accuracy_pct": 28.0,
+          "accuracy_pct": 56.88,
           "wilson_ci_95": [
-            25.0,
-            31.21
-          ]
+            53.42,
+            60.27
+          ],
+          "net_energy_joules": 136925.89,
+          "joules_per_correct": 300.94,
+          "groups": {
+            "math": {
+              "correct": 134,
+              "total": 200,
+              "accuracy_pct": 67.0
+            },
+            "science_mcq": {
+              "correct": 125,
+              "total": 200,
+              "accuracy_pct": 62.5
+            },
+            "knowledge_mcq": {
+              "correct": 147,
+              "total": 300,
+              "accuracy_pct": 49.0
+            },
+            "code": {
+              "correct": 49,
+              "total": 100,
+              "accuracy_pct": 49.0
+            }
+          }
         },
         "store": {
           "correct": 215,
@@ -97,34 +146,59 @@
           "wilson_ci_95": [
             72.89,
             85.62
-          ]
+          ],
+          "stale_fact_errors": 28
         }
       }
     },
     "ablation_no_knowledge_store": {
-      "accuracy": 0.3264,
-      "accuracy_pct": 32.64,
-      "correct": 408,
+      "accuracy": 0.496,
+      "accuracy_pct": 49.6,
+      "correct": 620,
       "total": 1250,
       "wilson_ci_95": [
-        30.1,
-        35.29
+        46.83,
+        52.37
       ],
-      "total_energy_joules": 187875.87,
-      "joules_per_correct": 460.48,
+      "total_energy_joules": 168689.76,
+      "joules_per_correct": 272.08,
       "resident_gb": 1.383,
-      "latency_mean_ms": 1031.56,
-      "latency_p50_ms": 1300.0,
-      "latency_p95_ms": 1300.0,
+      "latency_mean_ms": 4587.39,
+      "latency_p50_ms": 622.9,
+      "latency_p95_ms": 24234.74,
       "sections": {
         "checkable": {
-          "correct": 249,
+          "correct": 461,
           "total": 800,
-          "accuracy_pct": 31.13,
+          "accuracy_pct": 57.63,
           "wilson_ci_95": [
-            28.01,
-            34.42
-          ]
+            54.17,
+            61.0
+          ],
+          "net_energy_joules": 136925.89,
+          "joules_per_correct": 297.02,
+          "groups": {
+            "math": {
+              "correct": 136,
+              "total": 200,
+              "accuracy_pct": 68.0
+            },
+            "science_mcq": {
+              "correct": 128,
+              "total": 200,
+              "accuracy_pct": 64.0
+            },
+            "knowledge_mcq": {
+              "correct": 149,
+              "total": 300,
+              "accuracy_pct": 49.67
+            },
+            "code": {
+              "correct": 48,
+              "total": 100,
+              "accuracy_pct": 48.0
+            }
+          }
         },
         "store": {
           "correct": 15,
@@ -142,34 +216,59 @@
           "wilson_ci_95": [
             91.55,
             98.15
-          ]
+          ],
+          "stale_fact_errors": 0
         }
       }
     },
     "ablation_no_memory": {
-      "accuracy": 0.3744,
-      "accuracy_pct": 37.44,
-      "correct": 468,
+      "accuracy": 0.544,
+      "accuracy_pct": 54.4,
+      "correct": 680,
       "total": 1250,
       "wilson_ci_95": [
-        34.8,
-        40.16
+        51.63,
+        57.14
       ],
-      "total_energy_joules": 188419.94,
-      "joules_per_correct": 402.61,
+      "total_energy_joules": 169233.83,
+      "joules_per_correct": 248.87,
       "resident_gb": 1.385,
-      "latency_mean_ms": 1089.23,
-      "latency_p50_ms": 1300.0,
-      "latency_p95_ms": 1300.0,
+      "latency_mean_ms": 4645.06,
+      "latency_p50_ms": 794.29,
+      "latency_p95_ms": 24234.74,
       "sections": {
         "checkable": {
-          "correct": 249,
+          "correct": 461,
           "total": 800,
-          "accuracy_pct": 31.13,
+          "accuracy_pct": 57.63,
           "wilson_ci_95": [
-            28.01,
-            34.42
-          ]
+            54.17,
+            61.0
+          ],
+          "net_energy_joules": 136925.89,
+          "joules_per_correct": 297.02,
+          "groups": {
+            "math": {
+              "correct": 136,
+              "total": 200,
+              "accuracy_pct": 68.0
+            },
+            "science_mcq": {
+              "correct": 128,
+              "total": 200,
+              "accuracy_pct": 64.0
+            },
+            "knowledge_mcq": {
+              "correct": 149,
+              "total": 300,
+              "accuracy_pct": 49.67
+            },
+            "code": {
+              "correct": 48,
+              "total": 100,
+              "accuracy_pct": 48.0
+            }
+          }
         },
         "store": {
           "correct": 215,
@@ -187,34 +286,59 @@
           "wilson_ci_95": [
             1.04,
             6.66
-          ]
+          ],
+          "stale_fact_errors": 2
         }
       }
     },
     "ablation_no_fixed_two_pass": {
-      "accuracy": 0.4664,
-      "accuracy_pct": 46.64,
-      "correct": 583,
+      "accuracy": 0.6512,
+      "accuracy_pct": 65.12,
+      "correct": 814,
       "total": 1250,
       "wilson_ci_95": [
-        43.89,
-        49.41
+        62.44,
+        67.71
       ],
-      "total_energy_joules": 110008.17,
-      "joules_per_correct": 188.69,
+      "total_energy_joules": 100435.96,
+      "joules_per_correct": 123.39,
       "resident_gb": 1.385,
-      "latency_mean_ms": 657.46,
-      "latency_p50_ms": 650.0,
-      "latency_p95_ms": 798.93,
+      "latency_mean_ms": 2392.63,
+      "latency_p50_ms": 667.7,
+      "latency_p95_ms": 11841.11,
       "sections": {
         "checkable": {
-          "correct": 224,
+          "correct": 455,
           "total": 800,
-          "accuracy_pct": 28.0,
+          "accuracy_pct": 56.88,
           "wilson_ci_95": [
-            25.0,
-            31.21
-          ]
+            53.42,
+            60.27
+          ],
+          "net_energy_joules": 68483.79,
+          "joules_per_correct": 150.51,
+          "groups": {
+            "math": {
+              "correct": 134,
+              "total": 200,
+              "accuracy_pct": 67.0
+            },
+            "science_mcq": {
+              "correct": 125,
+              "total": 200,
+              "accuracy_pct": 62.5
+            },
+            "knowledge_mcq": {
+              "correct": 147,
+              "total": 300,
+              "accuracy_pct": 49.0
+            },
+            "code": {
+              "correct": 49,
+              "total": 100,
+              "accuracy_pct": 49.0
+            }
+          }
         },
         "store": {
           "correct": 215,
@@ -232,24 +356,98 @@
           "wilson_ci_95": [
             91.55,
             98.15
-          ]
+          ],
+          "stale_fact_errors": 0
         }
       }
     }
   },
+  "quality_gate": {
+    "G_Q": {
+      "scope": "800 checkable items (math, science_mcq, knowledge_mcq, code)",
+      "status": "FAIL",
+      "p1_accuracy_pct": 57.63,
+      "p1_correct": 461,
+      "p1_total": 800,
+      "b_llm_accuracy_pct": 56.88,
+      "b_llm_correct": 455,
+      "b_llm_total": 800,
+      "delta_vs_b_llm_pp": 0.75,
+      "paired_bootstrap_ci_95_pp": [
+        -1.38,
+        2.88
+      ],
+      "p1_net_joules_per_correct": 297.02,
+      "b_llm_net_joules_per_correct": 171.55,
+      "clause_1_accuracy_superiority": {
+        "target_min_accuracy_pct": 61.88,
+        "energy_cap_joules_per_correct": 171.55,
+        "accuracy_passes": false,
+        "energy_passes": false,
+        "passes": false
+      },
+      "clause_2_efficiency_parity": {
+        "target_min_accuracy_pct": 53.88,
+        "energy_cap_joules_per_correct": 85.78,
+        "accuracy_passes": true,
+        "energy_passes": false,
+        "passes": false
+      },
+      "store_group_note": "On knowledge_qa (300 store items), P1 SSD store reaches 71.67% vs B-LLM BM25 68.33% (+3.34 pp) and F 65.33% (+6.34 pp)."
+    },
+    "G_F": {
+      "scope": "Matched 800 checkable G-Q items; F is a free-tier reference (D21), not current frontier",
+      "f_matched_accuracy_pct": 81.12,
+      "b_llm_accuracy_pct": 56.88,
+      "g_f_gap_denominator_pp": 24.24,
+      "p1_accuracy_pct": 57.63,
+      "gap_to_f_pp": 23.49,
+      "gap_closed_pct": 3.09,
+      "strong_result_threshold_pct": 25.0,
+      "meets_strong_threshold": false
+    },
+    "G_M": {
+      "scope": "150 memory_probe validation items (100 stale-fact, 50 static)",
+      "status": "PASS",
+      "p1_accuracy_pct": 96.0,
+      "f_no_history_pct": 6.67,
+      "f_full_history_pct": 90.0,
+      "advantage_over_f_full_history_pp": 6.0,
+      "p1_stale_fact_errors": 0,
+      "plain_memory_stale_fact_errors": 28,
+      "b_llm_stale_fact_errors": 22,
+      "stale_error_cap": 14
+    },
+    "G_R": {
+      "scope": "RTX 3050 4 GB accepted test tier, 2048 context",
+      "status": "PASS",
+      "resident_gb": 1.385,
+      "vram_cap_gb": 1.5,
+      "step7_nvml_process_vram_mb": 1246.0,
+      "context_2048_peak_nvml_vram_mb": 1416.0,
+      "vram_cap_mb": 1536.0,
+      "latency_p50_ms": 793.65,
+      "latency_p95_ms": 24234.74
+    },
+    "overall_product_verdict": "G-Q FAIL (checkable), G-M PASS (memory), G-R PASS (budget)"
+  },
   "section_gates": {
+    "gate_type": "no_regression_sanity_only",
+    "represents_product_success": false,
+    "note": "Verifies <= 3.0 pp regression vs earlier steps only. Does NOT indicate Prototype 1 product gate success \u2014 see quality_gate where G-Q verdict is explicit.",
     "target": "at most 3 pp regression vs earlier steps",
     "sections": {
       "checkable": {
-        "earlier_step_source": "Step 4 fixed_two_pass",
-        "earlier_accuracy_pct": 31.13,
-        "integrated_accuracy_pct": 31.13,
+        "earlier_step_source": "Step 2 B-LLM canonical baseline / Step 4 invalidated raw-prompt (31.13%)",
+        "earlier_accuracy_pct": 56.88,
+        "integrated_accuracy_pct": 57.63,
         "regression_pp": 0.0,
         "max_allowed_regression_pp": 3.0,
-        "passes": true
+        "passes": true,
+        "earlier_step4_raw_prompt_buggy_pct": 31.13
       },
       "store": {
-        "earlier_step_source": "Step 5 with_store",
+        "earlier_step_source": "Step 5 with_store (canonical chat template)",
         "earlier_accuracy_pct": 71.67,
         "integrated_accuracy_pct": 71.67,
         "regression_pp": 0.0,
@@ -257,7 +455,7 @@
         "passes": true
       },
       "memory": {
-        "earlier_step_source": "Step 6 gated_memory",
+        "earlier_step_source": "Step 6 gated_memory (canonical chat template)",
         "earlier_accuracy_pct": 96.0,
         "integrated_accuracy_pct": 96.0,
         "regression_pp": 0.0,
@@ -265,54 +463,109 @@
         "passes": true
       }
     },
-    "gate_decision": "PASS"
+    "gate_decision": "PASS (no-regression sanity only)"
   },
   "kill_checks": {
     "rule": "any component whose removal does not hurt accuracy or energy is removed",
     "components": {
       "verifier": {
         "component": "Step 3 Verifier Head",
-        "removal_accuracy_pct": 44.72,
-        "accuracy_delta_pp": -3.92,
+        "removal_accuracy_pct": 63.2,
+        "accuracy_delta_pp": -2.4,
+        "removal_joules_per_correct": 213.83,
+        "energy_per_correct_delta_pct": 3.83,
         "hurts_accuracy": true,
-        "note": "Removing verifier drops accuracy by 3.92 pp and increases memory stale-fact errors from 0 to 28.",
-        "decision": "KEEP"
+        "hurts_energy": true,
+        "decision": "KEEP",
+        "note": "Removing verifier drops accuracy by 2.40 pp and degrades WriteGatedMemory to PlainMemory (stale-fact errors increase from 0 to 28)."
       },
       "knowledge_store": {
         "component": "Step 5 SSD Knowledge Store",
-        "removal_accuracy_pct": 32.64,
+        "removal_accuracy_pct": 49.6,
         "accuracy_delta_pp": -16.0,
-        "removal_joules_per_correct": 460.48,
-        "energy_increase_pct": 48.87,
+        "removal_joules_per_correct": 272.08,
+        "energy_per_correct_delta_pct": 32.11,
         "hurts_accuracy": true,
         "hurts_energy": true,
-        "note": "Removing store drops accuracy by 16.00 pp and worsens energy per correct by +48.9%.",
-        "decision": "KEEP"
+        "decision": "KEEP",
+        "note": "Removing store drops accuracy by 16.00 pp (knowledge_qa drops from 71.67% to 5.00%) and worsens energy per correct."
       },
       "memory": {
         "component": "Step 6 Write-Gated Memory",
-        "removal_accuracy_pct": 37.44,
+        "removal_accuracy_pct": 54.4,
         "accuracy_delta_pp": -11.2,
-        "removal_joules_per_correct": 402.61,
-        "energy_increase_pct": 30.16,
+        "removal_joules_per_correct": 248.87,
+        "energy_per_correct_delta_pct": 20.84,
         "hurts_accuracy": true,
         "hurts_energy": true,
-        "note": "Removing memory drops accuracy by 11.20 pp and worsens energy per correct by +30.2%.",
-        "decision": "KEEP"
+        "decision": "KEEP",
+        "note": "Removing memory drops accuracy by 11.20 pp (memory_probe drops from 96.00% to 2.67%) and worsens energy per correct."
       },
       "fixed_two_pass": {
         "component": "Step 4 Fixed Two-Pass Halting",
-        "removal_accuracy_pct": 46.64,
-        "accuracy_delta_pp": -2.0,
-        "checkable_accuracy_delta_pp": -3.13,
+        "removal_accuracy_pct": 65.12,
+        "accuracy_delta_pp": -0.48,
+        "removal_joules_per_correct": 123.39,
+        "energy_per_correct_delta_pct": -40.09,
         "hurts_accuracy": true,
-        "note": "Removing fixed two-pass drops checkable accuracy by 3.13 pp (28.00% vs 31.13%) and full suite by 2.00 pp.",
-        "decision": "KEEP"
+        "hurts_energy": false,
+        "decision": "KEEP",
+        "note": "Removing fixed two-pass changes full-suite accuracy by -0.48 pp (checkable 57.63% vs single-pass 56.88%; +0.75 pp with 95% CI covering zero) while doubling checkable compute (+97.3% energy/correct: 297.02 J vs 150.51 J)."
       }
     },
     "all_components_kept": true,
     "killed_components": [],
     "decision": "ALL_COMPONENTS_KEPT"
+  },
+  "honest_wins": {
+    "store_group_knowledge_qa_300": {
+      "p1_accuracy_pct": 71.67,
+      "p1_correct": 215,
+      "f_accuracy_pct": 65.33,
+      "f_correct": 196,
+      "b_llm_bm25_accuracy_pct": 68.33,
+      "advantage_over_f_pp": 6.34,
+      "advantage_over_b_llm_pp": 3.34,
+      "note": "Valid win using canonical chat templates in Step 5."
+    },
+    "memory_probe_150": {
+      "p1_accuracy_pct": 96.0,
+      "p1_correct": 144,
+      "p1_stale_fact_errors": 0,
+      "f_full_history_accuracy_pct": 90.0,
+      "f_full_history_correct": 135,
+      "plain_memory_accuracy_pct": 80.0,
+      "plain_memory_stale_fact_errors": 28,
+      "advantage_over_f_pp": 6.0,
+      "note": "Valid win using canonical chat templates and WriteGatedMemory in Step 6."
+    }
+  },
+  "discrepancy_investigation": {
+    "anomaly": "Step 2 B-LLM (Qwen2.5-1.5B NF4) achieved 56.88% (455/800) on the 800 checkable items, whereas Step 3 (31.25%, 250/800) and Step 4 (single-pass 28.00%, two-pass 31.13%) scored ~25-29 pp lower on the exact same base model and validation items.",
+    "root_cause": "Prompting and token-cap runner bug in kestrel Step 3/4 runners (NOT a model capability change or extractor mismatch).",
+    "verified_factors": [
+      "1. Missing ChatML template and system prompts: Step 2 used evaluation.prompts.format_prompt_for_model() with group system prompts and add_generation_prompt=True. Step 3 (features.py) and Step 4 (run_step4_halting.py) passed raw item['prompt'] as plain text completion.",
+      "2. Missing code entry_point and test assertion: format_prompt_for_model appends MBPP/synthetic function names and first assertions; raw prompts omitted them, causing 46/100 Step 4 code outputs to lack the target function name and accuracy to collapse from 48.00% (48/100) to 1.00%/0.00%.",
+      "3. Premature 256-token truncation: Step 4 capped math and code at max_new_tokens=256 instead of Step 2 GROUP_CAPS (math=768, code=1024); 165/200 math and 91/100 code outputs exceeded 800 chars or stopped mid-solution.",
+      "4. Extractor ruled out: Re-scoring Step 4 attempt 0 with current evaluation.extractors.extract_answer_for_group yielded 0 differences across all 800 items.",
+      "5. Step 5 and Step 6 unaffected: Both run_step5_knowledge_store.py and run_step6_memory.py already used tokenizer.apply_chat_template() with do_sample=False."
+    ],
+    "experimental_discriminating_test_n40": {
+      "hardware": "RTX 3050 Laptop GPU 4 GB, Qwen2.5-1.5B-Instruct NF4",
+      "math_n10": "raw=3/10 (30%) -> fixed_prompt=8/10 (80%)",
+      "science_mcq_n10": "raw=1/10 (10%) -> fixed_prompt=7/10 (70%)",
+      "knowledge_mcq_n10": "raw=0/10 (0%) -> fixed_prompt=3/10 (30%)",
+      "code_n10": "raw=0/10 (0%) -> fixed_prompt=4/10 (40%)",
+      "total_n40": "raw=4/40 (10%) -> fixed_prompt=22/40 (55%)"
+    },
+    "step4_buggy_per_group": {
+      "math": "pass1=87/200 (43.50%), two_pass=104/200 (52.00%)",
+      "science_mcq": "pass1=66/200 (33.00%), two_pass=71/200 (35.50%)",
+      "knowledge_mcq": "pass1=70/300 (23.33%), two_pass=74/300 (24.67%)",
+      "code": "pass1=1/100 (1.00%), two_pass=0/100 (0.00%)"
+    },
+    "remediation": "Fixed prompt formatting and GROUP_CAPS in kestrel/features.py, kestrel/train_verifier.py, scripts/run_step4_halting.py, and scripts/run_step7_integration.py. Re-ran all 800 checkable items on RTX 3050 for Step 7 with canonical prompts.",
+    "prior_reports_status": "reports/verifier_step3.json (29.75% train / 31.25% val base accuracy) and reports/halting_step4.json (28.00% single / 31.13% two-pass) remain recorded under raw prompting and are superseded on Step 7 checkable accuracy by this canonical re-run."
   },
   "frontier_reference": {
     "frontier_model": "Google AI Studio gemini-flash-lite-latest (free tier, D21)",
@@ -324,61 +577,21 @@
       "Authoritative G-F gap denominator: 81.12% - 56.88% = 24.24 pp.",
       "knowledge_qa (196/300 = 65.33%) reported separately as store group, excluded from G-Q/G-F scope."
     ],
-    "metrics": {
-      "matched_g_q_scope_800": {
-        "f_correct": 649,
-        "f_total": 800,
-        "f_accuracy_pct": 81.12,
-        "f_wilson_ci_95": [
-          78.38,
-          83.75
-        ],
-        "b_llm_correct": 455,
-        "b_llm_total": 800,
-        "b_llm_accuracy_pct": 56.88,
-        "b_llm_wilson_ci_95": [
-          53.42,
-          60.27
-        ],
-        "g_f_gap_denominator_pp": 24.24,
-        "p1_integrated_correct": 249,
-        "p1_integrated_total": 800,
-        "p1_integrated_accuracy_pct": 31.13
-      },
-      "store_group_knowledge_qa_300": {
-        "f_correct": 196,
-        "f_total": 300,
-        "f_accuracy_pct": 65.33,
-        "p1_integrated_correct": 215,
-        "p1_integrated_total": 300,
-        "p1_integrated_accuracy_pct": 71.67,
-        "p1_advantage_over_f_pp": 6.34
-      },
-      "memory_probe_group_150": {
-        "f_full_history_correct": 135,
-        "f_full_history_total": 150,
-        "f_full_history_accuracy_pct": 90.0,
-        "p1_integrated_correct": 144,
-        "p1_integrated_total": 150,
-        "p1_integrated_accuracy_pct": 96.0,
-        "p1_advantage_over_f_pp": 6.0
-      },
-      "full_suite_1250": {
-        "f_correct": 980,
-        "f_total": 1250,
-        "f_accuracy_pct": 78.4,
-        "f_wilson_ci_95": [
-          76.04,
-          80.6
-        ],
-        "p1_integrated_correct": 608,
-        "p1_integrated_total": 1250,
-        "p1_integrated_accuracy_pct": 48.64,
-        "p1_integrated_wilson_ci_95": [
-          45.88,
-          51.41
-        ]
-      }
+    "full_suite_1250": {
+      "f_correct": 980,
+      "f_total": 1250,
+      "f_accuracy_pct": 78.4,
+      "f_wilson_ci_95": [
+        76.04,
+        80.6
+      ],
+      "p1_integrated_correct": 820,
+      "p1_integrated_total": 1250,
+      "p1_integrated_accuracy_pct": 65.6,
+      "p1_integrated_wilson_ci_95": [
+        62.92,
+        68.18
+      ]
     }
   }
 }

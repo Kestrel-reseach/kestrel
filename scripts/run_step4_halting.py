@@ -30,6 +30,7 @@ if str(EVAL_DIR) not in sys.path:
     sys.path.insert(0, str(EVAL_DIR))
 
 from evaluation.extractors import extract_answer_for_group  # noqa: E402
+from evaluation.prompts import format_prompt_for_model  # noqa: E402
 from kestrel.halting import (  # noqa: E402
     Attempt,
     compare_strategies,
@@ -40,6 +41,12 @@ from kestrel.verifier import VerifierExample, VerifierFeatures, temperature_scal
 from kestrel.verifier_numpy import NumpyLogisticHead  # noqa: E402
 
 CHECKABLE_GROUPS = ("math", "science_mcq", "code", "knowledge_mcq")
+GROUP_CAPS: dict[str, int] = {
+    "math": 768,
+    "science_mcq": 32,
+    "knowledge_mcq": 32,
+    "code": 1024,
+}
 MANDATORY_ENERGY_LABEL = "Relative energy only; GPU NVML scope; same machine and session; not comparable across machines."
 ENERGY_PER_PASS_JOULES = 97.57  # Measured in Step 2: 78,055.25 J / 800 items
 
@@ -175,10 +182,11 @@ def generate_attempts_for_validation(
         if item_id in cached_attempts:
             continue
 
-        prompt = item["prompt"]
-        is_mcq = "Answer with the option letter" in prompt
+        group = str(item.get("group", ""))
+        prompt, _, _ = format_prompt_for_model(item, tokenizer=tokenizer)
+        is_mcq = group in ("science_mcq", "knowledge_mcq")
         eos_ids = [tokenizer.eos_token_id]
-        max_tokens = 32 if is_mcq else 256
+        max_tokens = GROUP_CAPS.get(group, 256)
         if is_mcq:
             eos_ids.extend([198, 271])
 

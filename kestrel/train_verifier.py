@@ -110,7 +110,10 @@ def build_examples(
             examples.append(cached[item_id])
             continue
 
-        answer = backend.generate(item["prompt"])
+        if hasattr(backend, "generate_for_item"):
+            answer = backend.generate_for_item(item)
+        else:
+            answer = backend.generate(item["prompt"])
         correct = scorer(item, answer.text)
         features = to_features(answer)
         example = VerifierExample(
