@@ -40,15 +40,33 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _fallback_prompt(item: dict[str, Any]) -> str:
+    """Used only when the companion eval repo is absent (e.g. kestrel-only CI)."""
+    system = {
+        "math": "Solve the problem and end with 'Final Answer: <number>'.",
+        "science_mcq": "Select the best option (A, B, C, or D).",
+        "knowledge_mcq": "Select the best option (A, B, C, or D).",
+        "code": "Write Python code with only one code block.",
+    }.get(str(item.get("group", "")), "Answer accurately and concisely.")
+    return f"[SYSTEM]\n{system}\n[USER]\n{item.get('prompt', '')}\n[ASSISTANT]\n"
+
+
 def build_rows(
     items: list[dict[str, Any]], tokenizer: Any | None = None
 ) -> list[dict[str, Any]]:
     """Build TRL dataset rows with canonical prompts and reward metadata."""
-    from evaluation.prompts import format_prompt_for_model
+    try:
+        from evaluation.prompts import format_prompt_for_model
+    except ImportError:
+        format_prompt_for_model = None
 
     rows: list[dict[str, Any]] = []
     for item in items:
-        prompt, prompt_hash, _ = format_prompt_for_model(item, tokenizer=tokenizer)
+        if format_prompt_for_model is not None:
+            prompt, prompt_hash, _ = format_prompt_for_model(item, tokenizer=tokenizer)
+        else:
+            prompt = _fallback_prompt(item)
+            prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
         rows.append(
             {
                 "prompt": prompt,
