@@ -4,8 +4,9 @@ Prototype 1 of a small, local assistant core that tries to get more answers per
 joule and per GB than the best same-size quantized LLM, and to close part of the
 quality gap to a frontier model on a narrow, locked test slice.
 
-The shared plan, pass/kill gates and step status live in **[PLAN.md](PLAN.md)**.
-The locked suite, baselines and energy harness live in the companion repository
+The shared plan, pass/kill gates and step status are kept in the owner's private
+Notion workspace, not in this public repository. The locked suite, baselines and
+energy harness live in the companion repository
 **[Kestrel-reseach/kestrel-eval](https://github.com/Kestrel-reseach/kestrel-eval)**.
 
 ## What this is — and what it is not
@@ -57,7 +58,7 @@ F with no history and within 5 points of F with full history; stale-fact errors
 at most half of plain external memory) and **G-R** (≤1.5 GB resident VRAM on the
 GPU tier, ≤4 GB resident RAM proposed on CPU tier, with joules per correct task
 and p50/p95 latency reported). Exact definitions and the acceptance status are
-in [PLAN.md](PLAN.md); gates are frozen before Step 0 completes and never
+in the owner's private plan; gates are frozen before Step 0 completes and never
 changed after seeing results.
 
 ## Hardware targets
@@ -72,7 +73,6 @@ changed after seeing results.
 
 ```
 .
-├── PLAN.md                     shared plan, gates, rules and step status
 ├── kestrel/                    prototype package
 │   ├── verifier.py             Step 3 — correctness head + calibration
 │   ├── halting.py              Step 4 — verifier-gated halting policy
