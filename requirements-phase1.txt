@@ -1,0 +1,6 @@
+# T4 runtime pins for scripts/train_phase1_grpo.py.
+# Install the Unsloth Colab package first, then apply these pins:
+#   pip install "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
+#   pip install -r requirements-phase1.txt
+transformers==4.56.2
+trl==1.18.2

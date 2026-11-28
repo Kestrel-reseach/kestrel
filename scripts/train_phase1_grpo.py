@@ -131,11 +131,12 @@ def main() -> None:
     parser.add_argument("--checkpoint-steps", type=int, default=25)
     args = parser.parse_args()
 
+    # Unsloth patches transformers at import time, so it must come first.
+    from unsloth import FastLanguageModel
+
     import torch
     from datasets import Dataset
-    from transformers import AutoTokenizer
     from trl import GRPOConfig, GRPOTrainer
-    from unsloth import FastLanguageModel
 
     from kestrel.phase1_rewards import default_extractor
 
@@ -185,10 +186,9 @@ def main() -> None:
         r=32,
         lora_alpha=32,
         target_modules="all-linear",
-        use_gradient_checkpointing="unlock_layers",
+        use_gradient_checkpointing=True,
         random_state=args.seed,
     )
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
     rows = build_rows(items, tokenizer=tokenizer)
     dataset = Dataset.from_list(rows)
 
@@ -210,6 +210,7 @@ def main() -> None:
         reward_funcs=make_reward_fn(default_extractor()),
         args=training_args,
         train_dataset=dataset,
+        processing_class=tokenizer,
     )
     trainer.train()
     trainer.save_model(str(out_dir / "adapter"))
