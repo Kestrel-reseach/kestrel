@@ -197,7 +197,8 @@ def main() -> None:
         learning_rate=args.learning_rate,
         max_steps=args.max_steps,
         num_generations=args.num_generations,
-        max_prompt_length=CONTEXT_LENGTH,
+        # TRL 1.18.2 has no max_prompt_length field; prompt length is bounded by
+        # the model's own context window (CONTEXT_LENGTH at load time).
         max_completion_length=args.max_completion_tokens,
         beta=0.0,
         save_steps=args.checkpoint_steps,
